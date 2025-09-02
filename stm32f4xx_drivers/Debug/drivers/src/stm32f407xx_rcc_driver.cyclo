@@ -1,0 +1,3 @@
+../drivers/src/stm32f407xx_rcc_driver.c:13:10:RCC_GetPll_Output	1
+../drivers/src/stm32f407xx_rcc_driver.c:17:10:RCC_GetPCLK2Value	6
+../drivers/src/stm32f407xx_rcc_driver.c:49:10:RCC_GetPCLK1Value	6
