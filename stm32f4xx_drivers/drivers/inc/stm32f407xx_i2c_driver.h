@@ -46,6 +46,19 @@
 #define I2C_WRITE_MODE		0
 #define I2C_READ_MODE		1
 
+/*
+ * I2C FLAGS
+ */
+#define I2C_FLAG_SB						(1 << I2C_SR1_SB)
+#define I2C_FLAG_ADDR					(1 << I2C_SR1_ADDR)
+#define I2C_FLAG_BTF					(1 << I2C_SR1_BTF)
+#define I2C_FLAG_STOPF					(1 << I2C_SR1_STOPF)
+#define I2C_FLAG_RXNE					(1 << I2C_SR1_RXNE)
+#define I2C_FLAG_TXE					(1 << I2C_SR1_TXE)
+#define I2C_FLAG_AF						(1 << I2C_SR1_AF)
+#define I2C_FLAG_OVR					(1 << I2C_SR1_OVR)
+#define I2C_FLAG_TIMEOUT				(1 << I2C_SR1_TIMEOUT)
+
 typedef struct
 {
 	uint8_t DeviceAddress;	 	/* !< Only when device acts as slave mode > */
