@@ -484,9 +484,6 @@ typedef struct
 #define SPI1			((SPI_RegDef_t*)SPI1_BASEADDR)
 #define SPI2			((SPI_RegDef_t*)SPI2_BASEADDR)
 #define SPI3			((SPI_RegDef_t*)SPI3_BASEADDR)
-#define SPI4			((SPI_RegDef_t*)SPI4_BASEADDR)
-#define SPI5			((SPI_RegDef_t*)SPI5_BASEADDR)
-#define SPI6			((SPI_RegDef_t*)SPI6_BASEADDR)
 
 #define I2C1			((I2C_RegDef_t*)I2C1_BASEADDR)
 #define I2C2			((I2C_RegDef_t*)I2C2_BASEADDR)
@@ -556,13 +553,11 @@ typedef struct
 #define SPI1_PCLK_EN() (RCC->APB2ENR |= (1 << 12))
 #define SPI2_PCLK_EN() (RCC->APB1ENR |= (1 << 14))
 #define SPI3_PCLK_EN() (RCC->APB1ENR |= (1 << 15))
-#define SPI4_PCLK_EN() (RCC->APB2ENR |= (1 << 13))
 
 /* Clock disable macros for SPIx peripherals */
 #define SPI1_PCLK_DI() (RCC->APB2ENR &= ~(1 << 12))
 #define SPI2_PCLK_DI() (RCC->APB1ENR &= ~(1 << 14))
 #define SPI3_PCLK_DI() (RCC->APB1ENR &= ~(1 << 15))
-#define SPI4_PCLK_DI() (RCC->APB2ENR &= ~(1 << 13))
 
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_i2c_driver.h"

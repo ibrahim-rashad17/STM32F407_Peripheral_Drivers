@@ -13,8 +13,8 @@
 /*
  * @SPI_DeviceMode
  */
-#define SPI_DEV_MODE_MASTER				0
-#define SPI_DEV_MODE_SLAVE				1
+#define SPI_DEV_MODE_MASTER				1
+#define SPI_DEV_MODE_SLAVE				0
 
 /*
  * @SPI_BusConfig
@@ -81,6 +81,10 @@ typedef struct
 /* SPI Peripheral Initialization/De-initialization APIs */
 void SPI_Init(SPI_Handle_t *pSPI_Handle);
 void SPI_DeInit(SPI_Handle_t *pSPI_Handle);
+
+/* SPI data transfer blocking APIs */
+void SPI_TransmitData(SPI_Handle_t *pSPI_Handle, uint8_t *pTxBfr, uint32_t len);
+void SPI_ReceiveData(SPI_Handle_t *pSPI_Handle, uint8_t *pRxBfr, uint32_t len);
 
 /* SPI Clock Control APIs */
 void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);

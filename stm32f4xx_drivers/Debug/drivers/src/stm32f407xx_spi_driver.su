@@ -1,0 +1,3 @@
+../drivers/src/stm32f407xx_spi_driver.c:24:6:SPI_PeriClockControl	16	static
+../drivers/src/stm32f407xx_spi_driver.c:69:6:SPI_Init	24	static
+../drivers/src/stm32f407xx_spi_driver.c:132:6:SPI_DeInit	16	static
