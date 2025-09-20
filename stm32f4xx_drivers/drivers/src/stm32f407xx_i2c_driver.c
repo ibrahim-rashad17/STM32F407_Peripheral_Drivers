@@ -39,6 +39,10 @@ void i2c_init(I2C_Handle_t *pI2C_Handle)
 	uint16_t ccr_value = 0;
 	uint8_t trise = 0;
 
+	//Enable the peripheral clock
+	I2C_PeriClk_Control(pI2C_Handle->pI2Cx, ENABLE);
+
+	//Enable the peripheral
 	I2C_PeripheralControl(pI2C_Handle->pI2Cx, ENABLE);
 
 	//1. Configuring the ack
@@ -618,6 +622,40 @@ static void I2C_CloseReceiveData(I2C_Handle_t *pI2C_Handle)
 	//Re-enable acking (if enabled by user)
 	if(pI2C_Handle->Sr == ENABLE)
 		I2C_ManageAcking(pI2C_Handle->pI2Cx, ENABLE);
+}
+
+void I2C_PeriClk_Control(I2C_RegDef_t *pI2Cx, uint8_t EnOrDi)
+{
+	if(EnOrDi == ENABLE)
+	{
+		if(pI2Cx == I2C1)
+		{
+			I2C1_PCLK_EN();
+		}
+		if(pI2Cx == I2C2)
+		{
+			I2C2_PCLK_EN();
+		}
+		if(pI2Cx == I2C3)
+		{
+			I2C3_PCLK_EN();
+		}
+	}
+	else
+	{
+		if(pI2Cx == I2C1)
+		{
+			I2C1_PCLK_DI();
+		}
+		if(pI2Cx == I2C2)
+		{
+			I2C2_PCLK_DI();
+		}
+		if(pI2Cx == I2C3)
+		{
+			I2C3_PCLK_DI();
+		}
+	}
 }
 
 void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)

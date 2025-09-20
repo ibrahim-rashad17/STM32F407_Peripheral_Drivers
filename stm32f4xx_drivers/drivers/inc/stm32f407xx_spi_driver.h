@@ -11,6 +11,17 @@
 #include "stm32f407xx.h"
 
 /*
+ * SPI Status Flags
+ */
+#define SPI_FLAG_RXNE			0
+#define SPI_FLAG_TXE			1
+#define SPI_FLAG_CRCERR			4
+#define SPI_FLAG_MODF			5
+#define SPI_FLAG_OVR			6
+#define SPI_FLAG_BSY			7
+
+
+/*
  * @SPI_DeviceMode
  */
 #define SPI_DEV_MODE_MASTER				1
@@ -86,7 +97,12 @@ void SPI_DeInit(SPI_Handle_t *pSPI_Handle);
 void SPI_TransmitData(SPI_Handle_t *pSPI_Handle, uint8_t *pTxBfr, uint32_t len);
 void SPI_ReceiveData(SPI_Handle_t *pSPI_Handle, uint8_t *pRxBfr, uint32_t len);
 
-/* SPI Clock Control APIs */
+/* SPI Clock Control API */
 void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+
+/* SPI Peripheral Control API */
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+
+void SPI_SSOEConfig(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
 
 #endif /* INC_STM32F407XX_SPI_DRIVER_H_ */

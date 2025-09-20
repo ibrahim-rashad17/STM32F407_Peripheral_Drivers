@@ -1,3 +1,0 @@
-../Src/usart_tx_test.c:20:5:main	24	static
-../Src/usart_tx_test.c:71:6:USART2_IRQHandler	8	static
-../Src/usart_tx_test.c:76:6:USART_ApplicationEventCallback	16	static

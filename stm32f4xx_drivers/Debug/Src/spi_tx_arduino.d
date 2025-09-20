@@ -1,4 +1,4 @@
-Src/usart_tx_test.o: ../Src/usart_tx_test.c \
+Src/spi_tx_arduino.o: ../Src/spi_tx_arduino.c \
  D:/IBRAHIM/Learnings/DRIVER\ DEVELOPMENT/workspace/stm32f4xx_drivers/drivers/inc/stm32f407xx.h \
  D:/IBRAHIM/Learnings/DRIVER\ DEVELOPMENT/workspace/stm32f4xx_drivers/drivers/inc/stm32f407xx_gpio_driver.h \
  D:/IBRAHIM/Learnings/DRIVER\ DEVELOPMENT/workspace/stm32f4xx_drivers/drivers/inc/stm32f407xx.h \
