@@ -1,4 +1,4 @@
-Src/spi_tx_arduino.o: ../Src/spi_tx_arduino.c \
+Src/i2c_send.o: ../Src/i2c_send.c \
  D:/IBRAHIM/Learnings/DRIVER\ DEVELOPMENT/workspace/stm32f4xx_drivers/drivers/inc/stm32f407xx.h \
  D:/IBRAHIM/Learnings/DRIVER\ DEVELOPMENT/workspace/stm32f4xx_drivers/drivers/inc/stm32f407xx_gpio_driver.h \
  D:/IBRAHIM/Learnings/DRIVER\ DEVELOPMENT/workspace/stm32f4xx_drivers/drivers/inc/stm32f407xx.h \

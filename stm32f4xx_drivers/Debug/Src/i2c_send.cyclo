@@ -1,0 +1,5 @@
+../Src/i2c_send.c:20:6:delay	2
+../Src/i2c_send.c:34:6:I2C1_GPIOInits	1
+../Src/i2c_send.c:65:6:I2C1_Inits	1
+../Src/i2c_send.c:77:6:GPIO_ButtonInit	1
+../Src/i2c_send.c:93:5:main	2

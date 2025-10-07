@@ -35,89 +35,70 @@ void I2C_PeripheralControl(I2C_RegDef_t *pI2Cx, uint8_t EnOrDi)
 
 void i2c_init(I2C_Handle_t *pI2C_Handle)
 {
-	uint32_t tempreg =0;
-	uint16_t ccr_value = 0;
-	uint8_t trise = 0;
+	uint32_t tempreg = 0 ;
 
-	//Enable the peripheral clock
-	I2C_PeriClk_Control(pI2C_Handle->pI2Cx, ENABLE);
+	//enable the clock for the i2cx peripheral
+	I2C_PeriClk_Control(pI2C_Handle->pI2Cx,ENABLE);
 
-	//Enable the peripheral
-	I2C_PeripheralControl(pI2C_Handle->pI2Cx, ENABLE);
-
-	//1. Configuring the ack
 	if(pI2C_Handle->i2c_config.I2C_Ack == ENABLE)
-		I2C_ManageAcking(pI2C_Handle->pI2Cx, ENABLE);
+	{
+		I2C_ManageAcking(pI2C_Handle->pI2Cx, I2C_ACK_ENABLE);
+	}
 	else
-		I2C_ManageAcking(pI2C_Handle->pI2Cx, DISABLE);
+	{
+		I2C_ManageAcking(pI2C_Handle->pI2Cx, I2C_ACK_DISABLE);
+	}
 
-	//2. Configure own address register
-	uint8_t temp = pI2C_Handle->i2c_config.DeviceAddress & 0xFE;
-	pI2C_Handle->pI2Cx->OAR1 &= ~(0x7F << 1);
-	pI2C_Handle->pI2Cx->OAR1 |= (temp << 1);
+	//configure the FREQ field of CR2
+	tempreg = 0;
+	tempreg |= RCC_GetPCLK1Value() /1000000U ;
+	pI2C_Handle->pI2Cx->CR2 =  (tempreg & 0x3F);
 
-	pI2C_Handle->pI2Cx->OAR1 |= (1 << 14);	//Mentioned in ref manual to always keep at 1
+   //program the device own address
+	tempreg = 0;
+	tempreg |= pI2C_Handle->i2c_config.DeviceAddress << 1;
+	tempreg |= ( 1 << 14);
+	pI2C_Handle->pI2Cx->OAR1 = tempreg;
 
-	//Configuring the serial clock (first configure the FREQ field)
-	uint32_t freq = RCC_GetPCLK1Value();
-
-	temp = freq/6;		//Frequency is in MHz
-
-	pI2C_Handle->pI2Cx->CR2 &= 0x3F;	//Clearing bits
-	pI2C_Handle->pI2Cx->CR2 |= ((temp & 0x3F) << I2C_CR2_FREQ);
-
-	//Configuring the CCR
+	//CCR calculations
+	uint16_t ccr_value = 0;
+	tempreg = 0;
 	if(pI2C_Handle->i2c_config.I2C_SCLK_Speed <= I2C_SPEED_SM_100K)
 	{
-		ccr_value = (pI2C_Handle->i2c_config.I2C_SCLK_Speed) / (2 * RCC_GetPCLK1Value());
-		tempreg = ccr_value & 0x0FFF;
-
-		pI2C_Handle->pI2Cx->CCR = tempreg;
-	}
-	else
+		//mode is standard mode
+		ccr_value = (RCC_GetPCLK1Value() / ( 2 * pI2C_Handle->i2c_config.I2C_SCLK_Speed ) );
+		tempreg |= (ccr_value & 0xFFF);
+	}else
 	{
-		//Check for Duty cycle and take steps based on that
+		//mode is fast mode
+		tempreg |= ( 1 << 15);
+		tempreg |= (pI2C_Handle->i2c_config.I2C_FMDutyCycle << 14);
 		if(pI2C_Handle->i2c_config.I2C_FMDutyCycle == I2C_FM_DUTY_2)
 		{
-			ccr_value = (pI2C_Handle->i2c_config.I2C_SCLK_Speed) / (3 * RCC_GetPCLK1Value());
-			tempreg = ccr_value & 0x0FFF;
-
-			pI2C_Handle->pI2Cx->CCR = tempreg;
-		}
-		else
+			ccr_value = (RCC_GetPCLK1Value() / ( 3 * pI2C_Handle->i2c_config.I2C_SCLK_Speed ) );
+		}else
 		{
-			ccr_value = (pI2C_Handle->i2c_config.I2C_SCLK_Speed) / (25 * RCC_GetPCLK1Value());
-			tempreg = ccr_value & 0x0FFF;
-
-			tempreg |= (1 << I2C_CCR_DUTY);
-
-			pI2C_Handle->pI2Cx->CCR = tempreg;
+			ccr_value = (RCC_GetPCLK1Value() / ( 25 * pI2C_Handle->i2c_config.I2C_SCLK_Speed ) );
 		}
-
-		//Fast mode
-		tempreg |= (1 << (I2C_CCR_FS));
+		tempreg |= (ccr_value & 0xFFF);
 	}
+	pI2C_Handle->pI2Cx->CCR = tempreg;
 
-	/* Configure TRISE
-	 *
-	 * As per I2C specifications:-
-	 * 		Max Trise for standard mode = 1000ns
-	 * 		Max Trise for fast mode	    = 300ns
-	 *
-	 * Refer RM0090 to get Trise register details
-	 *
-	 */
-
-	if(pI2C_Handle->i2c_config.I2C_SCLK_Speed <= I2C_SPEED_SM_100K)		//Standard mode
+	//TRISE Configuration
+	if(pI2C_Handle->i2c_config.I2C_SCLK_Speed <= I2C_SPEED_SM_100K)
 	{
-		trise = ( RCC_GetPCLK1Value() / (1000000U) ) + 1;
-	}
-	else	//Fast mode
+		//mode is standard mode
+
+		tempreg = (RCC_GetPCLK1Value() /1000000U) + 1 ;
+
+	}else
 	{
-		trise = ( (RCC_GetPCLK1Value() * 300) / (1000000000U) ) + 1;
+		//mode is fast mode
+		tempreg = ( (RCC_GetPCLK1Value() * 300) / 1000000000U ) + 1;
+
 	}
 
-	pI2C_Handle->pI2Cx->TRISE |= (trise & 0x3F);
+	pI2C_Handle->pI2Cx->TRISE = (tempreg & 0x3F);
 
 }
 
@@ -136,7 +117,7 @@ void i2c_init(I2C_Handle_t *pI2C_Handle)
  *
  * @Note              -
  */
-void I2C_MasterSendData(I2C_Handle_t *pI2C_Handle, uint8_t *pTxBuffer, uint8_t SlaveAddr, uint8_t Len, uint8_t Sr)
+void I2C_MasterSendData(I2C_Handle_t *pI2C_Handle, uint8_t *pTxBuffer, uint8_t Len, uint8_t SlaveAddr, uint8_t Sr)
 {
 	//1. Generate start condition
 	I2C_GenerateStartCondition(pI2C_Handle->pI2Cx);
@@ -146,6 +127,7 @@ void I2C_MasterSendData(I2C_Handle_t *pI2C_Handle, uint8_t *pTxBuffer, uint8_t S
 
 	//3. Write the slave addrs to DR (R/W' bit = 0 for write operation)
 	I2C_ExecuteAddressPhase(pI2C_Handle->pI2Cx, SlaveAddr, I2C_WRITE_MODE);
+//	I2C_ExecuteAddressPhaseWrite(pI2C_Handle->pI2Cx, SlaveAddr);
 
 	//4. Wait for ADDR Flag to be set
 	while( !(Get_I2C_FlagStatus(pI2C_Handle->pI2Cx, I2C_FLAG_ADDR)) );
@@ -691,7 +673,7 @@ static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr, uint
 
 static uint8_t Get_I2C_FlagStatus(I2C_RegDef_t *pI2Cx, uint8_t FLAG)
 {
-	if( (pI2Cx->SR1) & (1 << FLAG) )
+	if( (pI2Cx->SR1) & FLAG )
 		return HIGH;
 	return LOW;
 }
