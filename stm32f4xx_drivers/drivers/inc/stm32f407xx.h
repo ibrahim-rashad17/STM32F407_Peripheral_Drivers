@@ -52,25 +52,25 @@
  * ARM Cortex Mx Processor NVIC ISERx register Addresses
  */
 
-#define NVIC_ISER0          ( (__vo uint32_t*)0xE000E100 )
-#define NVIC_ISER1          ( (__vo uint32_t*)0xE000E104 )
-#define NVIC_ISER2          ( (__vo uint32_t*)0xE000E108 )
-#define NVIC_ISER3          ( (__vo uint32_t*)0xE000E10C )
+#define NVIC_ISER0          ( (__vo uint32_t*)0xE000E100UL )
+#define NVIC_ISER1          ( (__vo uint32_t*)0xE000E104UL )
+#define NVIC_ISER2          ( (__vo uint32_t*)0xE000E108UL )
+#define NVIC_ISER3          ( (__vo uint32_t*)0xE000E10CUL )
 
 
 /*
  * ARM Cortex Mx Processor NVIC ICERx register Addresses
  */
-#define NVIC_ICER0 			((__vo uint32_t*)0XE000E180)
-#define NVIC_ICER1			((__vo uint32_t*)0XE000E184)
-#define NVIC_ICER2  		((__vo uint32_t*)0XE000E188)
-#define NVIC_ICER3			((__vo uint32_t*)0XE000E18C)
+#define NVIC_ICER0 			((__vo uint32_t*)0XE000E180UL)
+#define NVIC_ICER1			((__vo uint32_t*)0XE000E184UL)
+#define NVIC_ICER2  		((__vo uint32_t*)0XE000E188UL)
+#define NVIC_ICER3			((__vo uint32_t*)0XE000E18CUL)
 
 
 /*
  * ARM Cortex Mx Processor Priority Register Address Calculation
  */
-#define NVIC_PR_BASE_ADDR 	0xE000E400
+#define NVIC_PR_BASE_ADDR 	0xE000E400UL
 
 /*
  * ARM Cortex Mx Processor number of priority bits implemented in Priority Register
@@ -484,9 +484,6 @@ typedef struct
 #define SPI1			((SPI_RegDef_t*)SPI1_BASEADDR)
 #define SPI2			((SPI_RegDef_t*)SPI2_BASEADDR)
 #define SPI3			((SPI_RegDef_t*)SPI3_BASEADDR)
-#define SPI4			((SPI_RegDef_t*)SPI4_BASEADDR)
-#define SPI5			((SPI_RegDef_t*)SPI5_BASEADDR)
-#define SPI6			((SPI_RegDef_t*)SPI6_BASEADDR)
 
 #define I2C1			((I2C_RegDef_t*)I2C1_BASEADDR)
 #define I2C2			((I2C_RegDef_t*)I2C2_BASEADDR)
@@ -556,13 +553,23 @@ typedef struct
 #define SPI1_PCLK_EN() (RCC->APB2ENR |= (1 << 12))
 #define SPI2_PCLK_EN() (RCC->APB1ENR |= (1 << 14))
 #define SPI3_PCLK_EN() (RCC->APB1ENR |= (1 << 15))
-#define SPI4_PCLK_EN() (RCC->APB2ENR |= (1 << 13))
 
 /* Clock disable macros for SPIx peripherals */
 #define SPI1_PCLK_DI() (RCC->APB2ENR &= ~(1 << 12))
 #define SPI2_PCLK_DI() (RCC->APB1ENR &= ~(1 << 14))
 #define SPI3_PCLK_DI() (RCC->APB1ENR &= ~(1 << 15))
-#define SPI4_PCLK_DI() (RCC->APB2ENR &= ~(1 << 13))
+
+/*
+ * Clock Enable Macros for I2Cx peripherals
+ */
+#define I2C1_PCLK_EN() (RCC->APB1ENR |= (1 << 21))
+#define I2C2_PCLK_EN() (RCC->APB1ENR |= (1 << 22))
+#define I2C3_PCLK_EN() (RCC->APB1ENR |= (1 << 23))
+
+/* Clock disable macros for I2Cx peripherals */
+#define I2C1_PCLK_DI() (RCC->APB1ENR &= ~(1 << 21))
+#define I2C2_PCLK_DI() (RCC->APB1ENR &= ~(1 << 22))
+#define I2C3_PCLK_DI() (RCC->APB1ENR &= ~(1 << 23))
 
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_i2c_driver.h"

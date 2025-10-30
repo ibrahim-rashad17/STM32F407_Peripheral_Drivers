@@ -114,6 +114,8 @@ void I2C_ER_IRQHandling(I2C_Handle_t *pI2C_Handle);
 //Some additionals APIs
 void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi);
 
+void I2C_PeripheralControl(I2C_RegDef_t *pI2Cx, uint8_t EnOrDi);
+
 
 //Application call back
 void I2C_ApplicationEventCallback(I2C_Handle_t *pI2C_Handle, uint8_t AppEv);

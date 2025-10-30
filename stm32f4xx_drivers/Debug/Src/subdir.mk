@@ -5,19 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Src/i2c_send.c \
 ../Src/syscalls.c \
-../Src/sysmem.c \
-../Src/usart_tx_test.c 
+../Src/sysmem.c 
 
 OBJS += \
+./Src/i2c_send.o \
 ./Src/syscalls.o \
-./Src/sysmem.o \
-./Src/usart_tx_test.o 
+./Src/sysmem.o 
 
 C_DEPS += \
+./Src/i2c_send.d \
 ./Src/syscalls.d \
-./Src/sysmem.d \
-./Src/usart_tx_test.d 
+./Src/sysmem.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -27,7 +27,7 @@ Src/%.o Src/%.su Src/%.cyclo: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/syscalls.cyclo ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.cyclo ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su ./Src/usart_tx_test.cyclo ./Src/usart_tx_test.d ./Src/usart_tx_test.o ./Src/usart_tx_test.su
+	-$(RM) ./Src/i2c_send.cyclo ./Src/i2c_send.d ./Src/i2c_send.o ./Src/i2c_send.su ./Src/syscalls.cyclo ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.cyclo ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
 
 .PHONY: clean-Src
 

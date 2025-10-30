@@ -90,18 +90,17 @@ void gpio_init(GPIO_Handle_t *pGPIO_Handle)
 	if(mode <= GPIO_MODE_ANALOG)
 	{
 		pGPIO_Handle->pGPIOx->MODER |= (temp << (2*pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber));
-		if(mode == GPIO_MODE_OUT)
-		{
-			//Configure output type and speed (First doing speed)
-			temp = pGPIO_Handle->GPIO_PinConfig.GPIO_PinSpeed;
-			pGPIO_Handle->pGPIOx->OSPEEDR &= ~(3 << (2*pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber));
-			pGPIO_Handle->pGPIOx->OSPEEDR |= (temp << (2*pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber));
 
-			//Configuring op type
-			temp = pGPIO_Handle->GPIO_PinConfig.GPIO_PinOPType;
-			pGPIO_Handle->pGPIOx->OTYPER &= ~(1 << pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber);
-			pGPIO_Handle->pGPIOx->OTYPER |= (temp << pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber);
-		}
+		//Configure output type and speed (First doing speed)
+		temp = pGPIO_Handle->GPIO_PinConfig.GPIO_PinSpeed;
+		pGPIO_Handle->pGPIOx->OSPEEDR &= ~(3 << (2*pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber));
+		pGPIO_Handle->pGPIOx->OSPEEDR |= (temp << (2*pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber));
+
+		//Configuring op type
+		temp = pGPIO_Handle->GPIO_PinConfig.GPIO_PinOPType;
+		pGPIO_Handle->pGPIOx->OTYPER &= ~(1 << pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber);
+		pGPIO_Handle->pGPIOx->OTYPER |= (temp << pGPIO_Handle->GPIO_PinConfig.GPIO_PinNumber);
+
 
 		//Configuring PUPD
 		temp = pGPIO_Handle->GPIO_PinConfig.GPIO_PinPuPdControl;
